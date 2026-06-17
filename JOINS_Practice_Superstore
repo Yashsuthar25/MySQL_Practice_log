@@ -1,0 +1,81 @@
+-- these are practice queries for JOINS in SQL using the superstore database and have added a new customers table to the database. The customers table contains the following columns: Customer_Name, Email, and Membership.
+
+SELECT superstore_sales_data.Customer_Name, 
+superstore.customers.Email,
+ superstore_sales_data.Sales 
+FROM
+ superstore.superstore_sales_data
+ INNER JOIN superstore.customers
+  ON superstore.superstore_sales_data.Customer_Name = superstore.customers.Customer_Name;
+  -- This query retrieves the Customer_Name, Email, and Sales from the superstore_sales_data and 
+   -- customers tables by performing an INNER JOIN on the Customer_Name column.
+
+
+
+  SELECT superstore_sales_data.Customer_Name, Membership, Profit
+  FROM
+    superstore.superstore_sales_data
+INNER JOIN superstore.customers
+  ON superstore.superstore_sales_data.Customer_Name = superstore.customers.Customer_Name;
+  -- This query retrieves the Customer_Name, Membership, and Profit from the superstore_sales_data and 
+   -- customers tables by performing an INNER JOIN on the Customer_Name column.
+
+   
+
+   --Now, these are for LEFT JOINs
+
+   SELECT *
+   FROM 
+    superstore.customers
+    LEFT JOIN superstore.superstore_sales_data
+    ON superstore.customers.Customer_Name = superstore.superstore_sales_data.Customer_Name;
+    -- This query retrieves all records from the customers table and the matching records from the superstore_sales_data table. 
+    --If there is no match, NULL values will be returned for the columns from the superstore_sales_data table.
+
+
+    SELECT superstore.customers.Customer_Name, Category
+    FROM 
+     superstore.customers
+     LEFT JOIN superstore.superstore_sales_data
+      ON superstore.customers.Customer_Name = superstore.superstore_sales_data.Customer_Name;
+      -- This query retrieves the Customer_Name and Category from the customers table and the matching records from 
+    --the superstore_sales_data table.
+    -- If there is no match, NULL values will be returned for the Category column.   
+
+
+    -- Now, these are for RIGHT JOINs
+    SELECT *
+    FROM 
+     superstore.superstore_sales_data AS ssd
+     RIGHT JOIN superstore.customers AS c
+      ON ssd.Customer_Name = c.Customer_Name;
+      -- This query retrieves all records from the superstore_sales_data table and the matching records from the customers table. 
+      -- If there is no match, NULL values will be returned for the columns from the customers table.
+
+
+      SELECT 
+      order_id,
+       ssd.Customer_Name, 
+       c.Email, ssd.Sales, 
+       c.Membership
+      FROM 
+     superstore.superstore_sales_data AS ssd
+     RIGHT JOIN superstore.customers AS c
+      ON ssd.Customer_Name = c.Customer_Name;
+      -- This query retrieves the order_id, Customer_Name, Email, Sales, and Membership from the superstore_sales_data 
+      -- and customers tables by performing a RIGHT JOIN on the Customer_Name column.
+
+
+    
+    -- Now, these are for SELF JOINs
+    SELECT 
+       a.Customer_Name,
+       b.Customer_Name,
+       a.State
+    FROM superstore_sales_data AS a    
+    JOIN superstore_sales_data AS b   
+    ON a.State = b.State             
+    AND a.Customer_Name != b.Customer_Name  
+  -- This query retrieves pairs of customers from the superstore_sales_data table who are from the same state 
+  -- but have different names. It uses a SELF JOIN to compare the table to itself based on the State column while 
+  -- ensuring that the Customer_Name values are not the same.
