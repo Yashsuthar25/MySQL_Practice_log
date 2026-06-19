@@ -1,0 +1,36 @@
+-- Now, These are Clauses LENGTH, LEFT, RIGHT & SUBSTRING
+
+SELECT LENGTH(Customer_Name) AS No_Of_Characters
+FROM
+ superstore.superstore_sales_data
+ WHERE 
+  Order_ID = "ORD-0004";
+  -- This Query calculates the length of the Customer_Name for the Order_ID "ORD-0004" in the superstore_sales_data table 
+  -- and returns it as No_Of_Characters. 
+
+-- Now, This is LEFT
+SELECT LEFT(Customer_Name, 5) AS First_Name
+FROM
+ superstore.superstore_sales_data
+ WHERE 
+  Order_ID = "ORD-0004";
+  -- This Query retrieves the first 5 characters of the Customer_Name for the Order_ID "ORD-0004" in the superstore_sales_data table 
+  -- and returns it as First_Name.
+
+-- Now, This is RIGHT
+SELECT RIGHT(Customer_Name, 5) AS Last_Name
+FROM
+ superstore.superstore_sales_data
+ WHERE 
+  Order_ID = "ORD-0004";
+  -- This Query retrieves the last 5 characters of the Customer_Name for the Order_ID "ORD-0004" in the superstore_sales_data table 
+  -- and returns it as Last_Name.
+
+-- Now, This is SUBSTRING
+SELECT SUBSTRING(Customer_Name, 1, 4) AS First_Name
+FROM
+ superstore.superstore_sales_data
+ WHERE
+  Order_ID = "ORD-0004";
+  -- This Query retrieves a substring of the Customer_Name starting from the first character and spanning 4 characters for the Order_ID "ORD-0004" in the superstore_sales_data table 
+  -- and returns it as First_Name.

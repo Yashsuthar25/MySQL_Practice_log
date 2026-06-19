@@ -1,0 +1,7 @@
+-- Now, This is how we can combine Tables in SQL
+
+SELECT CONCAT( City, " ,", State, " ,", Country) AS Location
+FROM
+ superstore.superstore_sales_data;
+ -- This Query combines City, State, Country columns from the superstore_sales_data table into a single table As Location 
+ -- With the help CONCAT.
