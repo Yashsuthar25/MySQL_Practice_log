@@ -1,0 +1,37 @@
+/* UNION, An UNION query is used to combine the results of two or more SELECT statements into a single result set. 
+ Each SELECT statement within the UNION must have the same number of columns in the result sets with similar data types. 
+ NOTE:The UNION operator selects only distinct values by default. */
+
+
+SELECT Product_Name ,  "In Demand" AS Demand_Status
+FROM 
+ superstore.superstore_sales_data
+WHERE 
+ Sales > 4000
+UNION DISTINCT
+SELECT Product_Name , "Not In Demand" AS Demand_Status
+FROM 
+ superstore.superstore_sales_data
+WHERE 
+ Sales <= 2000;
+ /* This query will return a combined list of product names along with their demand status based on the sales figures.
+   Products with sales greater than 4000 will be labeled as "In Demand," while those with sales less than or equal 
+   to 2000 will be labeled as "Not In Demand." The UNION DISTINCT operator ensures that only unique product names
+  are included in the final result set, eliminating any duplicates. */
+
+
+  SELECT Product_Name ,  "In Demand" AS Demand_Status
+FROM 
+ superstore.superstore_sales_data
+WHERE 
+ Sales > 4000
+UNION ALL
+SELECT Product_Name , "Not In Demand" AS Demand_Status
+FROM 
+ superstore.superstore_sales_data
+WHERE 
+ Sales <= 2000;
+/* This query will return a combined list of product names along with their demand status based on the sales figures.
+   Products with sales greater than 4000 will be labeled as "In Demand," while those with sales less than or equal 
+   to 2000 will be labeled as "Not In Demand." The UNION ALL operator includes all product names in the final result set,
+   including duplicates, allowing for a comprehensive view of the demand status across all products. */

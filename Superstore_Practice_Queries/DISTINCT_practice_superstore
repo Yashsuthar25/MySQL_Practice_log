@@ -1,0 +1,12 @@
+-- Now, This is DISTINCT query to get unique customer names from the superstore sales data.
+
+
+SELECT DISTINCT (Customer_Name) AS Unique_Customers
+FROM
+ superstore.superstore_sales_data;
+ -- This query will return a list of unique customer names from the superstore sales data, eliminating any duplicates.
+
+SELECT DISTINCT (Category) AS Unique_Categories 
+ FROM
+ superstore.superstore_sales_data;
+ -- This query will return a list of unique product categories from the superstore sales data, eliminating any duplicates.
