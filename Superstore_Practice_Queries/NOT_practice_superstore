@@ -1,0 +1,25 @@
+/* Now, This is the NOT clause practice query,The NOT clause is used to exclude certain records from the result 
+ set based on specified conditions.*/ 
+ SELECT
+   Product_Name
+ FROM
+  superstore.superstore_sales_data
+  WHERE
+   NOT Category = 'FURNITURE';
+   /* This query will return a list of product names from the superstore_sales_data table where the category is not 'FURNITURE'. 
+   The NOT operator is used to exclude all records that belong to the 'FURNITURE' category, 
+   allowing us to focus on products from other categories. */
+
+
+   -- Now, this is NOT and ORDER BY to sort the data in descending order 
+   SELECT 
+    Customer_Name, Sales, Product_Name
+    FROM 
+     superstore.superstore_sales_data
+     WHERE
+      NOT Product_Name = 'Samsung Galaxy' AND NOT State = 'California'
+      ORDER BY Sales DESC;
+/* This query retrieves the customer name, sales amount, and product name from the superstore_sales_data table, 
+excluding records where the product name is 'Samsung Galaxy' and the state is 'California'. 
+The NOT operator is used to filter out these specific conditions, and the ORDER BY clause sorts the resulting data 
+in descending order based on the sales amount, allowing us to see the highest sales figures at the top of the result set. */ 
