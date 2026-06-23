@@ -1,0 +1,22 @@
+-- Now this is the CAST clause practice query, The CAST clause is used to convert a value from one data type to another.
+
+SELECT CAST (Order_Date AS DATE)
+ FROM
+  superstore.superstore_sales_data;
+  /* This query retrieves the Order_Date from the superstore_sales_data table and uses the CAST function to convert it 
+    to a DATE data type.
+  This is useful when you want to ensure that the Order_Date is treated as a date value */
+
+-- Now, their are mainly 5 data types in SQL, which are as follows:
+-- INT, DECIMAL, CHAR, DATE, DATETIME, and we can use the CAST function to convert values between these data types as needed.
+
+;SELECT CAST(Order_ID AS CHAR(8)
+FROM 
+superstore.superstore_sales_data
+/* This query retrieves the Order_ID from the superstore_sales_data table and uses the CAST function to convert it to a 
+CHAR data type with a length of 8 characters. 
+This is useful when you want to treat the Order_ID as a string rather than a numeric value, allowing for more flexible
+ formatting and manipulation of the data. */
+
+ /* MySQL doesn't support the VARCHAR , It supports the CHAR data type, which is a fixed-length string.
+  So, we can use the CHAR data type to achieve similar functionality as VARCHAR in MySQL*/
