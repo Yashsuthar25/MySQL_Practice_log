@@ -1,0 +1,44 @@
+--Now, this is the BETWEEN clause, The BETWEEN clause is used to filter the result set within a certain range. 
+--The values can be numbers, text, or dates.
+
+SELECT *
+FROM
+ superstore.superstore_sales_data
+ WHERE
+  sales BETWEEN 2000 AND 4000;
+  /* This query retrieves all the records from the superstore_sales_data table where the sales value 
+falls between 2000 and 4000, inclusive.
+This is useful when you want to filter the data based on a specific range of values, allowing 
+you to focus on a subset of the data that meets your criteria. */
+
+
+-- The same above query can also be written using the AND operator as follows:
+SELECT *
+FROM
+ superstore.superstore_sales_data
+ WHERE
+  sales >= 2000 AND sales <= 4000;
+
+-- Now, this is for Date values, an query example is given below:
+SELECT *
+FROM
+ superstore.superstore_sales_data
+ WHERE
+  Order_Date BETWEEN '2020-01-10' AND '2021-01-10'
+ ORDER BY Order_Date DESC;
+  /* This query retrieves all the records from the superstore_sales_data table where the Order_Date 
+falls between January 10, 2020, and January 10, 2021, inclusive and sorts the results in a Descending order. */
+
+
+-- Now, this is NOT BETWEEN clause, The NOT BETWEEN clause is used to filter the result set outside a certain range.
+SELECT *
+FROM
+ superstore.superstore_sales_data
+ WHERE 
+  Sales NOT BETWEEN 2000 AND 3400
+ ORDER BY Sales ;
+ /* This query retrieves all the records from the superstore_sales_data table where the Sales value
+falls outside the range of 2000 to 3400, inclusive and sorts the results in an Ascending order. This is useful 
+when you want to exclude a specific range of values from your results, allowing you to focus on the data that falls outside
+ of that range. */
+
