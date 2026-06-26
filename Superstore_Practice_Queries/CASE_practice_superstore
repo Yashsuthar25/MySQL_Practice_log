@@ -1,0 +1,16 @@
+--Now, this is the CASE clause/Statement
+
+SELECT *
+ CASE 
+  WHEN Profit >1500 THEN 'Hight Profit'
+  WHEN Profit BETWEEN 1000 AND 1500 THEN 'Moderate Profit'
+  WHEN Profit BETWEEN 1 AND 999 THEN 'Low Profit'
+  WHEN Profit <= 0 THEN 'Loss'
+  END AS Profit_Category
+FROM
+ superstore.superstore_sales_data
+ ORDER BY Profit DESC;
+  /* This query retrieves all the records from the superstore_sales_data table and categorizes the Profit values into
+   different categories using the CASE statement.*/
+
+   
