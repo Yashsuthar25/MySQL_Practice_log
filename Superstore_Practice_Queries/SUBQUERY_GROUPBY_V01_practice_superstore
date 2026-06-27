@@ -1,0 +1,30 @@
+/*Now, this is SBUQUERY, basically using A query within a query with the help of () - Parenthesis, and it can be done 
+under 3 clauses, which are SELECT, FROM & WHERE */
+-- NOTE: All 3 clauses can be used but they're for specific use cases and most commonly used is the WHERE clause.
+
+SELECT
+  Profit_summary.Category,
+  Profit_summary.Total_Profit
+FROM (
+    SELECT 
+     SUM(Profit) AS Total_Profit, Category
+    FROM 
+     superstore.superstore_sales_data
+    GROUP BY 
+     Category
+) AS Profit_summary
+WHERE 
+Total_Profit > (
+    SELECT 
+     AVG(Total_Profit)
+    FROM (
+        SELECT 
+         SUM(Profit) AS Total_Profit
+        FROM 
+         superstore.superstore_sales_data
+        GROUP BY 
+         Category
+    ) AS avg_summary
+);
+
+--Now, this is an lengthy query, I'll be creating another version of this as V02.
