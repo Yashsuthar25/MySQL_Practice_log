@@ -1,0 +1,21 @@
+/* Now, as Subqueries are can become complex with Correlated tables and joins, The queries in this particular practice session
+will be Short and can be done easily, I'll be sharing some other info as well and The HAVING clause. */
+
+
+
+-- Now, we use HAVING instead of WHERE clause, because it lets us filter the data after the aggregation is done.
+SELECT 
+ Product_Name, 
+  SUM(Sales) AS Total_sales,
+FROM 
+ superstore.superstore_sales_data
+GROUP BY 
+ Product_Name
+HAVING
+ Tota_sales > (SELECT AVG(Sales) 
+                 FROM superstore.superstore_sales_data
+                 GROUP BY Product_Name) AS avg_sales;
+
+/* Now, this is a simple query, but this query has also took my enough time to understand the concept and applying it, I've 
+Struggled a lot with subqueries from the last 2 days, but With practice this can be solved,
+Because you've to understand SQL actually breaks a query and the logic. */
