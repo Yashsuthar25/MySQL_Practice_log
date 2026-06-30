@@ -1,0 +1,42 @@
+-- These are the basic mathematical operators used in SQL (+, -, *, /) Addition, SUbtraction, Multiplication, Division
+-- Now,let's begin with the DATEDIFF and EXTRACT clauses, both are for dates
+SELECT 
+ Order_ID,
+ Order_Date,
+ Ship_Date,
+ DATEDIFF(Ship_Date, Order_Date) AS Order_Processing_Duration
+FROM
+ superstore.superstore_sales_data;
+ -- The results are the differences between Ship & Order Date, Let's find out the average processing duration in the same query.
+
+ SELECT
+ AVG(DATEDIFF(Ship_Date, Order_Date)) AS Average_Processing_Duration
+FROM
+ superstore.superstore_sales_data;
+
+-- Now, let's find out what is the use of EXTRACT clause.
+SELECT
+ Ship_Date
+FROM
+ superstore.superstore_sales_data;
+
+ -- Now, suppose I only need the year from the date, I can do this via LEFT clause and EXTRACT, Extract is more faster to 
+ -- execute.
+ SELECT 
+  EXTRACT(Year FROM Ship_Date) AS Year_of_Orders
+FROM
+ superstore.superstore_sales_data;
+-- This returns the year column.
+
+-- Now, can I use both the functions in a single query? Let's find out.
+SELECT
+ Order_ID,
+ Product_Name,
+ AVG(DATEDIFF(Ship_Date, Order_Date)) AS Average_Processing_Duration,
+ EXTRACT(Month FROM Ship_Date) AS Month_of_Shipment
+FROM 
+ superstore.superstore_sales_data
+GROUP BY 
+ Product_Name;
+ -- The results yielded from the query are not that useful but still they add value, always try to one step further from what 
+ -- You've learned from the tutorials or lessons, that is when you start thinking.
