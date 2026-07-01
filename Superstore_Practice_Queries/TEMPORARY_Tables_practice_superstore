@@ -1,0 +1,36 @@
+-- These are TEMPORARY tables, they are used to store data temporarily, and they are automatically dropped when the session ends.
+-- Let's create a temporary table to store the average processing duration for each product.
+
+-- Temporary tables are created using CREATE TEMPORARY TABLE, but their are other ways as well Like Using
+-- WITH, SELECT INTO, and CREATE TABLE AS SELECT, They all serve different aspects of temporary table creation.
+
+-- Now, CREATE TEMPORARY TABLE is used to create a temporary table that exists only for the duration of the session. 
+CREATE TEMPORARY TABLE temp_product_sales AS (
+    SELECT 
+       Product_Name,
+       Sales,
+       Profit
+       FROM
+        superstore.superstore_sales_data
+);
+
+-- Now, let's query the temporary table to see the data stored in it.
+SELECT *
+ FROM
+  temp_product_sales;
+
+-- Now, let's find out the average, min, and max sales & Profit for each product from the temporary table.
+SELECT
+ Product_Name,
+ AVG(Sales) AS average_sales,
+ AVG(Profit) AS average_profit,
+ MIN(Sales) AS min_sales,
+ MIN(Profit) AS min_profit,
+MAX(Sales) AS max_sales,
+MAX(Profit) AS max_profit
+FROM
+ temp_product_sales
+GROUP BY
+ Product_Name;
+
+ -- To be honest, it is 11:53PM, and I am tired, So I will stop here but I've tried to keep up my consistency and I will.
