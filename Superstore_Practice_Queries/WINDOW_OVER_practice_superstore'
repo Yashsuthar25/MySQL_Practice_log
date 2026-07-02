@@ -1,0 +1,14 @@
+/* Now, This is OVER & PARTITION BY clause, 
+  This is used instead of GROUP BY clause, but it just partitions the data into groups and performs the aggregate function 
+  on each group without collapsing the rows into a single row per group. */
+
+-- These are known as WINDOW functions, Their are a few types, I'll be using OVER here, and gradually explore the rest in future.
+-- Took a lot of time to figure out how am I going to use it on my dataset, but I think this is it.
+SELECT
+ AVG(Sales) OVER (PARTITION BY Category) AS Avg_Sales_By_Category,
+ FROM 
+  superstore.superstore_sales_data
+WHERE
+ Sales > 1800;
+ -- This is of no use, as it is not giving the correct output, HAVING & GROUP BY are the right one here, let me try again.
+ -- Sorry, I was not able to figure out how to use it in this case, but I will try again in future.
