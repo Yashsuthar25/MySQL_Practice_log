@@ -1,0 +1,65 @@
+/* This session is not for any new clauses, but just practice the ones I have learned so far, 
+Today I had a strange day, I was not able to focus on anything, but I thought I can still practice what I've learnt,
+I've started my PBL_Excel_GIGS first project, and I see a lot of potential of using SQL in it, So as you can guess,
+That's gonna be the first dataset, where I'll be using SQL, looking forward to it, 
+To my current situation, I would like to remember the saying of The Napolean, */
+-- "You're great if you're able to do the average, while others around you are losing their mind" - I hope he did say it.
+
+/* In the below query, I'll join 2 tables Customers & Sales data, I'll find out the top 10 buyers for all the years, 
+I'll be breaking this into sytematic approach */
+SELECT 
+ Customer_Name, 
+ Category,
+ EXTRACT(Year FROM Order_Date) AS Year_of_purchase,
+ Sales AS Top_10_Clients
+FROM
+ superstore.superstore_sales_data AS Sales
+LEFT JOIN 
+ superstore.customers AS Customers
+ON
+ Sales.Customer_Name = Customers.Customer_Name
+GROUP BY
+ Customer_Name, Category, Year_of_purchase
+ORDER BY
+ Sales DESC
+LIMIT
+ 10;
+ 
+ /* I can't believe this query throwed just 2 Errors, and I'll paste the corrected query below, and also the results today,
+ This is not huge but I built this query from just my memory and I feel something is working.*/
+ 
+ SELECT 
+ Sales.Customer_Name, 
+ Category,
+ EXTRACT(Year FROM Order_Date) AS Year_of_purchase,
+ Sales AS Top_10_Clients
+FROM
+ superstore.superstore_sales_data AS Sales
+LEFT JOIN 
+ superstore.customers AS Customers
+ON
+ Sales.Customer_Name = Customers.Customer_Name
+GROUP BY
+ Customer_Name, Category, Year_of_purchase, Sales
+ORDER BY
+ Sales DESC
+LIMIT
+ 10;
+ 
+ -- The Output of the above query.
+
+ 
+ Daniel Johnson	  Furniture	     2020	4986.37
+John Smith	      Furniture	     2020	4983.73
+Lisa Smith	      Furniture	     2021	4979.89
+Jessica Davis	  Office Supplies2020	4976.86
+James Miller	  Technology	2020	4976.63
+Lisa Johnson	Office Supplies	2020	4975.8
+Lisa Davis	      Furniture	    2021	4973.91
+Jessica Davis	 Office Supplies2021	4973.19
+William Taylor	  Furniture	    2020	4968.74
+Sarah Johnson	  Office Supplies2021	4962.83
+
+-- The year should be in an order but to be honest, I've to figure it out, I'll soon do more queries related to these.
+/* As I gone through the query, with AI, their are many logical nuances, but I'll keep this as it is, and push a V2 for the
+More logic driven query, but for now, this is a good start, and I feel good about it.*/

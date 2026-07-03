@@ -1,0 +1,64 @@
+-- This is the second version of the query, fixing the nuances
+
+-- The V1 query
+SELECT 
+ Sales.Customer_Name, 
+ Category,
+ EXTRACT(Year FROM Order_Date) AS Year_of_purchase,
+ Sales AS Top_10_Clients
+FROM
+ superstore.superstore_sales_data AS Sales
+LEFT JOIN 
+ superstore.customers AS Customers
+ON
+ Sales.Customer_Name = Customers.Customer_Name
+GROUP BY
+ Customer_Name, Category, Year_of_purchase, Sales
+ORDER BY
+ Sales DESC
+LIMIT
+ 10;
+
+ -- The nuances, LEFT JOIN is looking good, but it is returning just nothing
+ -- The Group is not displaying the correct picture, because it is grouped by just sales, not total sales.
+ -- The Year is off, and I got to know a shortcut for EXTRACT, so let's start.
+
+ SELECT
+ Sales.Customer_Name, 
+ Category,
+ Customers.Customer_ID,
+ YEAR(Order_Date) AS Year_of_purchase, -- This is the shortcut for EXTRACT, and it is working fine.
+ SUM(Sales) AS total_sales_by_customers_TOP10
+ FROM
+ superstore.superstore_sales_data AS Sales
+ LEFT JOIN 
+ superstore.customers AS Customers
+  ON
+ Sales.Customer_Name = Customers.Customer_Name
+ GROUP BY
+ Sales.Customer_Name, Category, Year_of_purchase
+ ORDER BY
+ Year_of_purchase DESC
+ LIMIT
+ 10;
+
+ -- This is the final query, Came across a few nuances, and also very obvious ones, but I didn't notice it first, now I did
+
+ SELECT
+ Sales.Customer_Name, 
+ Category,
+ YEAR(Order_Date) AS Year_of_purchase, -- This is the shortcut for EXTRACT, and it is working fine.
+ SUM(Sales) AS total_sales_by_customers_TOP10
+ FROM
+ superstore.superstore_sales_data AS Sales
+ GROUP BY
+  Category, Year_of_purchase, Sales.Customer_Name
+ ORDER BY
+ total_sales_by_customers_TOP10 DESC
+ LIMIT
+ 10;
+
+ -- This isn't a perfect versio of query, but it is a good start, and I feel good about it.
+
+
+
