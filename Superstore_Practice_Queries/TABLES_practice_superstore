@@ -1,0 +1,45 @@
+-- In this particular session, I'll be touching the core basics and one of the core functions of SQL, 
+-- CREATE, INSERT, and DROP the table.
+
+CREATE TABLE IF NOT EXISTS employees (
+    Employee_ID INT PRIMARY KEY,
+    First_Name VARCHAR(75) NOT NULL,
+    Last_Name VARCHAR(75) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    City VARCHAR(50) NOT NULL
+    Hire_Date DATE NOT NULL,
+    Salary DECIMAL(10, 2) NOT NULL
+
+
+)
+-- This above query is creating a table called employees.
+
+
+SELECT *
+     FROM 
+      superstore.employees;
+-- The above query is selecting all the data from the employees table.
+
+
+INSERT INTO employees (Employee_ID, First_Name, Last_Name, Email, City, Hire_Date, Salary) VALUES
+(001, 'John', 'Doe', 'john.doe@example.com', 'New York', '2020-01-15', 50000.00),
+(002, 'Jane', 'Smith', 'jane.smith@example.com', 'Los Angeles', '2019-03-22', 60000.00);
+-- The above query is inserting two records into the employees table.
+
+
+SELECT *
+FROM
+ superstore.employees
+WHERE
+ Employee_ID = '002';
+ -- The above query is selecting the record from the employees table where the Employee_ID is '002'.
+
+ --Now, I'll be dropping the table, which means deleting the table from the database.
+ DROP TABLE IF EXISTS employees;
+
+
+ SELECT * 
+ FROM
+  superstore.employees;
+  -- The above query is selecting all the data from the employees table, but since we dropped the table, it will return 
+  --an error indicating that the table does not exist.
