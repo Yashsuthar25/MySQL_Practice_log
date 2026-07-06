@@ -1,0 +1,57 @@
+-- Now, today I'll be looking into CTE's(Common Table Experssions) and Stored Procedures.
+
+--CTE's, they are also temporarily created tables but they are created for only a one time use and they are not stored anywhere.
+WITH CTE_Sales AS (
+ SELECT 
+    Product_Name,
+     Order_ID,
+     Sales, 
+      Profit
+    FROM
+     superstore.superstore_sales_data
+    WHERE
+     Sales > 200
+)
+SELECT *
+FROM CTE_Sales
+ORDER BY 
+ Sales, Profit DESC
+LIMIT 
+ 20;
+ 
+ -- Now, this is to verify if the CTE_Sales still exists,
+ SELECT *
+ FROM
+  CTE_Sales;
+-- As expected, table 'Not Exists' error is returned.
+
+
+
+-- Now, I'll be creating a stored procedure, which is a set of SQL statements that can be executed as a single unit.
+-- It is used to store complex queries as well as to encapsulate business logic and improve performance.
+
+DELIMITER //
+CREATE PROCEDURE The_Highest_Sales_Products()
+BEGIN
+ SELECT 
+    Product_Name,
+     SUM(Sales) AS Total_Sales
+    FROM
+     superstore.superstore_sales_data
+    GROUP BY
+     Product_Name
+    ORDER BY 
+     Total_Sales DESC
+    LIMIT 
+     10;
+END //
+DELIMITER ;
+-- Their is no requirement that you have to change the delimiter, but it is a good practice to do so.
+
+-- Now, this is to call the stored procedure and execute it.
+CALL The_Highest_Sales_Products();
+
+/*Their is something else with Stored Procedures, which is that they can also accept parameters, which allows for more dynamic and
+ flexible queries. 
+ - I'll be doing this someday in future, because it could be a bit complex & Confusing for me to understand at this point of 
+ time. */ 
