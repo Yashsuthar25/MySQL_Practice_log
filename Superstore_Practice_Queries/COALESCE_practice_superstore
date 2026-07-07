@@ -1,0 +1,15 @@
+-- Today, we'll practice about COALESCE, It is used to return the first non-null value in a list of expressions.
+-- In this example, we will use the COALESCE function to handle null values in our dataset.
+
+SELECT Product_Name, 
+     COALESCE(Product_Category, 'UNKNOWN_CATEGORY') AS Product_Category
+FROM
+ superstore.superstore_sales_data;
+
+ /*Now, this query will return the Product_Name and Product_Category, replacing any null values in the Product_Category column
+  with 'UNKNOWN_CATEGORY'. This is useful for ensuring that our dataset does not have any missing values in the Product_Category
+   field, which can be important for analysis and reporting. */
+/* NOTE: This does not permanently fills the NULL's, It is only for current query results, To permanently fix the NULL's, 
+UPDATE clause has to be used instead. */
+
+-- It is already past 10:55PM, I'm tired so I've only practiced one quick & easy clause today.
