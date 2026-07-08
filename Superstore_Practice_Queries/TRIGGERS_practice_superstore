@@ -1,0 +1,19 @@
+-- Triggers, These are used to trigger any change you like to when an event occurs, let's understand how.
+
+/* Now, I've 2 tables in my superstore dataset, suppose I want my customers table to update Automatically when an Sale is made to 
+any New Customer not exisiting one, let's create a trigger which will make sure the Customers table get updated automatically. */
+
+DELIMITER //
+CREATE TRIGGER Auto_Update
+    AFTER INSERT ON superstore.superstore_sales_data
+    FOR EACH ROW
+BEGIN
+  INSERT INTO superstore.customers (Customer_Name)
+  VALUES (NEW.Customer_Name);
+END //
+DELIMITER ;
+
+/* Now, whenever a new Customer_Name is entered in superstore_sales_data table, the same will be updated in customers Table,
+EVENTS is also another function which SCHDEULE's a event, I'll explore it in future. */
+
+-- Now, the TRIGGER is created but I can't enter any new data because the dataset is actually regarding sales.
