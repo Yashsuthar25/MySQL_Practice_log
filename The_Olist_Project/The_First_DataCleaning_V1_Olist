@@ -1,0 +1,36 @@
+/* This sql file will be short because I'm just starting out, I'll just check for some basic data Cleaning steps in here,
+I'll be going to increase my pace but I'm currently a little busy*/
+
+/* the files I'll be uploading in this Olist_Project are practice files, I'll be creating a complete Project with Raw Data,
+ Necessary Metadata, steps & More, Once I've complete the 1st phase of the Project.*/
+
+ --I'm not creating Raw data files copy for practice because I've already saved Raw CSV files elsewhere.
+
+ -- Just Checking for Duplicates - For `Olist_customers` Table.
+
+
+SELECT *
+FROM  
+ Olist_database.Olist_customers;
+
+SELECT COUNT(customer_unique_id)
+FROM
+ Olist_database.Olist_customers
+GROUP BY 
+ customer_unique_id
+HAVING
+ customer_unique_id >1;
+ -- Didn't get the answer, so tried again
+
+ 
+
+SELECT 
+    customer_id, 
+    COUNT(customer_id) AS Count_Customers
+FROM
+    Olist_database.Olist_customers
+GROUP BY 
+    customer_id
+HAVING
+    Count_Customers >1;
+-- Answer, No Duplicate Values.
