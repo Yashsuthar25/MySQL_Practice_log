@@ -1,0 +1,38 @@
+/* This particular session is for Checking for NULL values in the olist_customers table & with that some basic Data Consistency 
+checks, I'll be going slow for the first table, and then will try to make the query's more advanced & faster, once I start with
+The next table.*/
+
+SELECT 
+ COUNT(customer_id)
+FROM 
+ olist_database.olist_customers
+WHERE 
+ customer_id IS NULL;
+--The output is '0' but repeating this for every single column is furstrating & also not efficient, let's make it a bit more better.
+
+SELECT 
+ COUNT(
+    CASE WHEN customer_id IS NULL THEN 1 END) AS Null_count_customer_id,
+ COUNT(
+    CASE WHEN customer_unique_id IS NULL THEN 1 END) AS Null_count_customer_unique_id,
+COUNT(
+    CASE WHEN customer_zip_code_prefix IS NULL THEN 1 END) AS Null_count_customer_zip_code_prefix,
+COUNT(
+    CASE WHEN customer_city IS NULL THEN 1 END) AS Null_count_customer_city,
+COUNT(
+    CASE WHEN customer_state IS NULL THEN 1 END) AS Null_count_customer_state
+FROM 
+ olist_database.olist_customers;
+-- This query's output is '0' for all columns, And we can say this is the exact reason SQL is better in many cases than Excel.
+
+-- Now, some Basic data consistency checks,
+-- let's check the length of value for customer_state column, as it should be exactly 2.
+
+SELECT 
+ COUNT(customer_state)
+FROM
+ olist_database.olist_customers
+WHERE
+ LENGTH(customer_state) > '2';
+-- The output is '0', I'll stop here today, and will begin tomorrow with V3.
+-- For reference, I use AI such as Claude, Perplexity and many others for my assistance & for whenever I encounter a error.
