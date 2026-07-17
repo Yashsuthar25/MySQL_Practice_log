@@ -1,0 +1,46 @@
+/* Sorry, My consistency is a little off currently,
+Today, in this sessions I'll be extending the data consistency checks from where we left in V2 */
+
+SELECT *
+FROM
+ olist_database.olist_customers;
+
+ -- This query checks if the values in customer_id are exactly 32 characters, and lists out if any of them are below or Above 32
+ SELECT
+  customer_id 
+FROM
+ olist_database.olist_customers
+WHERE
+ LENGTH(customer_id) <> 32;
+ -- Their are '0' .
+
+ /* This query checks if the values in customer_unique_id are exactly 32 characters, and lists out if any of them are below or 
+ Above 32 */
+ SELECT
+  customer_unique_id 
+FROM
+ olist_database.olist_customers
+WHERE
+ LENGTH(customer_unique_id) <> 32;
+ -- The output is '0'
+
+
+ /* This query checks if the values in customer_zip_code_prefix are exactly 5 characters, and lists out if any of them are below 
+ or Above 5 characters.*/
+ SELECT
+  customer_zip_code_prefix 
+FROM
+ olist_database.olist_customers
+WHERE
+ LENGTH(customer_zip_code_prefix) <> 5;
+ -- The Output is '0'
+
+ -- Now, I'll be checking for the customers_state columns States count, because Brazil only has 27 states.
+ SELECT
+  DISTINCT customer_state,
+  COUNT(*) AS count_state
+FROM 
+ olist_database.olist_customers
+ GROUP BY
+  customer_state;
+-- The output is 27 Rows, which is correct.
