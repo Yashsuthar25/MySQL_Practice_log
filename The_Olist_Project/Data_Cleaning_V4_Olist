@@ -1,0 +1,34 @@
+-- In this current session, I'll go through the Olist_Cusomters table to make sure the data is the Correct Data Type.
+
+-- Their is a very useful & Underated SQL clause, 'DESCRIBE', It tells us the Data type, Primary keys, Are NULL value allowed.
+
+DESCRIBE
+ olist_database.olist_customers;
+
+-- Now, let's use REGEXP, this is used to check if the values in a columns are digits.
+
+SELECT
+ customers_zip_code_prefix
+FROM 
+ olist_database.olist_customers
+WHERE
+ customers_zip_code_prefix NOT REGEXP'^[0-9]+$';
+ -- The output is '0', all the values are only digits.
+
+-- This is an extra cleaning check, which was suggested by AI, let's do it as well.
+SELECT
+  COUNT(DISTINCT UPPER(TRIM(customer_city)))
+FROM
+ olist_database.olist_customers;
+ -- The output is 4119
+ 
+ SELECT
+  COUNT(DISTINCT(customer_city))
+  FROM
+   olist_database.olist_customers;
+-- The output is 4119
+
+/* So, with this, The olist_customers table is cleaned, I'll be repeating the same steps on all the other tables, 
+and also some additional ones if required.
+With that, for the next ones, I'll complete all the cleaning in one go. */
+ 
