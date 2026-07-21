@@ -1,0 +1,38 @@
+/* In this particular session, I'll try to cover all of the Data Cleaning steps for olist_geolocation which I did for 
+the olist_customers table, I'll try my best to cover everything in one session and in the next session we'll explore if any
+Further Data Cleaning is required.*/
+/* be honest, I know AI is much better than me or manual data cleaning but to build the thinking, the ability to even Interpret 
+The results of AI, I have to know what exactly data cleaning is and what should be done to yield the best results.*/
+
+SELECT *
+FROM
+ olist_database.olist_geolocation;
+
+ -- this below checks for the Length of the geolocation_zip,  columns.
+ SELECT 
+  geolocation_zip_code_prefix,
+  geolocation_state
+FROM
+ olist_database.olist_geolocation
+WHERE
+ LENGTH(geolocation_state) <> 2 OR
+ LENGTH(geolocation_zip_code_prefix) <> 4 AND
+ LENGTH(geolocation_zip_code_prefix) <> 5;
+ -- The output is '0', But the metadata says the Zip_code length should be exactly 10, let's cross verifty.
+
+ DESCRIBE olist_database.olist_geolocation;
+
+ -- The next query will check for the latitude & longitude's because those should be between -90 & 90 and -180 & 180 respectively.
+ SELECT 
+  geolocation_lat,
+  geolocation_lng
+FROM 
+ olist_database.olist_geolocation
+WHERE
+ geolocation_lat NOT BETWEEN -90 AND 90 OR
+ geolocation_lng NOT BETWEEN -180 AND 180;
+
+ /* Now, their is very much confusion going on, I've spent a lot of time debugging things, the metadata, the table structure,
+ I'm gonna be leaving here it today, In the next V2, I'll figure out this issue, and will complete the data cleaning.
+ Today, I got to know why Data cleaning requires a lot of time, Why data validation is important and also why Automated ETL is 
+ also needed.*/
