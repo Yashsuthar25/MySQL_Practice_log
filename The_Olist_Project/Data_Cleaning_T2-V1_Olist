@@ -18,7 +18,7 @@ WHERE
  LENGTH(geolocation_state) <> 2 OR
  LENGTH(geolocation_zip_code_prefix) <> 4 AND
  LENGTH(geolocation_zip_code_prefix) <> 5;
- -- The output is '0', But the metadata says the Zip_code length should be exactly 10, let's cross verifty.
+ -- The output is '0', But the metadata says the Zip_code length should be exactly 10, which is not correct, let's cross verifty.
 
  DESCRIBE olist_database.olist_geolocation;
 
