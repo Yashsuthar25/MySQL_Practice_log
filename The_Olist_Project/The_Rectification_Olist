@@ -1,0 +1,38 @@
+/* Today, After struggling for about 40 minutes, I was able to import 3 tables data, 
+which were olist_sellers, product_category_name_translation & products table*/
+-- Still their are 4 more table's data importing is remaining, for which I've encountered some errors, Which I've to figure out.
+
+/*For today, 
+I'll just explore the data, By tomorrow, I'll import the rest of the table's data & get going with data wrangling.*/
+
+SELECT *
+FROM
+ olist_database.olist_products;
+
+ SELECT *
+ FROM 
+  olist_database.olist_product_category_name_translation;
+
+  SELECT *
+  FROM 
+   olist_database.olist_sellers;
+-- The data is visible.
+
+-- Now let's count the rows and compare it with the Metadata, Metadata is very important.
+SELECT 
+ 'olist_sellers', 
+ COUNT(*) 
+  FROM olist_sellers
+UNION ALL
+SELECT 
+ 'product_category_name_translation', 
+  COUNT(*) 
+   FROM product_category_name_translation
+UNION ALL
+SELECT 
+ 'olist_products', 
+  COUNT(*) 
+   FROM olist_products;
+-- The output is, 3095, 71, 32951 respectively. which matches with the Metadata.
+
+-- This much for today, debugging takes a lot of time & AI has made it a lot easier, When you actually practice, you learn a lot.
