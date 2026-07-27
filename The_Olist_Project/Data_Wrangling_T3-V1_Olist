@@ -1,12 +1,62 @@
-/* Today, It is late but I'll just start with the 3rd Table, and will looking forward to completing the Process by Tomorrow for 
-This exact table.*/
+-- Today, I'll be starting with Data cleaning for olist_order_items, this will be my T3(table 3), so let's begin.
 
-SELECT *
+-- First, A DESCRIBE query to just get a glimpse.
+DESCRIBE olist_order_items;
+-- It has 4 columns for just different ID's, this could be a very important table for Joins.
+
+-- Now, some basic checks.
+SELECT 
+ order_id,
+ COUNT(order_id) AS Count_orders
+FROM
+ olist_database.olist_order_items
+GROUP BY
+ order_id
+HAVING
+ Count_orders <>1;
+ /* I used this for Duplicates, but the results were unexpected, after with the help of AI and many reviews, I found out it needs 
+ Some different query to find out the duplicates, going with that now, I thought including my mistakes is also important.*/
+
+SELECT
+ order_id, 
+ order_item_id,
+ COUNT(*) AS total_count
+FROM 
+ olist_database.olist_order_items
+GROUP BY 
+ order_id, order_item_id
+HAVING
+ total_count <>1;
+
+-- Now, some counts, because as DESCRIBE query states, NULL's are allowed in all columns.
+SELECT 
+ COUNT(
+  CASE WHEN order_id IS NULL THEN 1 END) AS Null_Count_order_id,
+COUNT(
+  CASE WHEN order_item_id IS NULL THEN 1 END) AS Null_Count_order_item_id,
+COUNT(
+  CASE WHEN product_id IS NULL THEN 1 END) AS Null_Count_product_id,
+COUNT(
+  CASE WHEN seller_id IS NULL THEN 1 END) AS Null_Count_seller_id,
+COUNT(
+  CASE WHEN shipping_limit_date IS NULL THEN 1 END) AS Null_Count_shipping_limit_date,
+COUNT(
+  CASE WHEN price IS NULL THEN 1 END) AS Null_Count_price,
+COUNT(
+  CASE WHEN freight_value IS NULL THEN 1 END) AS Null_Count_freight_value
 FROM
  olist_database.olist_order_items;
+-- The output, shipping_limit_date columns is completely empty, then what is the use I don't know, else their are no NULL's
+-- Turns out, the issue is from data staging & inserting step, let's fix it. 
 
- /*Today, I learned a very valuable lesson, You should always check you've imported the complete data, 
- My first 2 tables data was complete, but my rest of the columns are just blank with schema.*/
- -- PBL looks like this, A great way too learn but a very tiring one.
+-- This is to check,
+SELECT
+ shipping_limit_date
+FROM
+ staging_order_items
+LIMIT
+ 5;
+-- Their are real dates in the format YYYY-MM-DD HH:MM:SS
 
- -- So, I'll be figuring out my way from this new task of mine.
+/* The fix, which was not possible today, I'll complete it by tomorrow, and will continue after completing the 
+shipping_limit_date. */

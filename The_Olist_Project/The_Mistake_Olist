@@ -1,0 +1,12 @@
+/* Today, It is late but I'll just start with the 3rd Table, and will looking forward to completing the Process by Tomorrow for 
+This exact table.*/
+
+SELECT *
+FROM
+ olist_database.olist_order_items;
+
+ /*Today, I learned a very valuable lesson, You should always check you've imported the complete data, 
+ My first 2 tables data was complete, but my rest of the columns are just blank with schema.*/
+ -- PBL looks like this, A great way too learn but a very tiring one.
+
+ -- So, I'll be figuring out my way from this new task of mine.
