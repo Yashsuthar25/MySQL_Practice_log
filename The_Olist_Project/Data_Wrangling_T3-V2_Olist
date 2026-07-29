@@ -1,0 +1,71 @@
+-- So, let's begin with fixing the shipping_limit_date column.
+
+/*To be honest, After going through many trial & error, the fastest way was to drop the table and import it again from the staging
+Table, that is what I did, and it worked out pretty well,
+Before that, I was actually wrangling the data by doing some basic checks, and that is when I got into the 
+shipping_limit_date column problem */
+
+--Here is all the query's I did to fix the table.
+SELECT *
+FROM
+ olist_database.olist_orders
+LIMIT
+ 1000;
+ 
+ 
+SELECT *
+FROM
+ olist_database.olist_order_items
+LIMIT
+ 500;
+ 
+ SELECT 
+  shipping_limit_date,
+STR_TO_DATE(shipping_limit_date,'%Y-%m-%d %H:%i:%s')
+FROM
+ olist_database.staging_order_items
+LIMIT 5;
+
+DESCRIBE staging_order_items;
+
+SHOW FULL PROCESSLIST;
+
+DROP TABLE IF EXISTS
+ olist_order_items;
+ 
+ USE olist_database;
+
+-- Create the New table schema.
+CREATE TABLE olist_order_items (
+    order_id VARCHAR(32),
+    order_item_id INT,
+    product_id VARCHAR(32),
+    seller_id VARCHAR(32),
+    shipping_limit_date DATETIME,
+    price DECIMAL(10,2),
+    freight_value DECIMAL(10,2)
+);
+
+-- Imported the data from staging to the table with proper data types.
+INSERT INTO olist_order_items
+SELECT 
+    order_id,
+    CAST(order_item_id AS UNSIGNED),
+    product_id,
+    seller_id,
+    STR_TO_DATE(shipping_limit_date, '%Y-%m-%d %H:%i:%s'),
+    CAST(price AS DECIMAL(10,2)),
+    CAST(freight_value AS DECIMAL(10,2))
+FROM staging_order_items
+WHERE order_id IS NOT NULL AND order_id <> '';
+
+-- Verified the count with Metadata, and cross-checked if the shipping_limit_date stated the value as DATETIME data type.
+SELECT COUNT(*) AS total_rows FROM olist_order_items;
+SELECT COUNT(*) AS null_dates FROM olist_order_items WHERE shipping_limit_date IS NULL;
+
+SELECT
+ shipping_limit_date
+FROM
+ olist_database.olist_order_items;
+
+-- I learned many new query clauses along the way, such as SHOW FULL PROCESS LIST, KILL QUERY, and many more.
