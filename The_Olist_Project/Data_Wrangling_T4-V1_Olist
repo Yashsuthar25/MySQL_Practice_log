@@ -1,0 +1,67 @@
+-- Hello, after 3 consecutive holidays, I'm back
+-- The first day I was just doing my stuff while for the second & third day I was worried of losing the pace of everyday SQL.
+
+-- So, let's begin with the 4th table which is 'olist_order_payments', I'll try to complete this by V2.
+
+SELECT *
+FROM 
+ olist_database.olist_order_payments;
+
+-- This is for the duplicates.
+SELECT
+ order_id, 
+ COUNT(*) AS count_order_id,
+ payment_sequential
+FROM
+ olist_database.olist_order_payments
+GROUP BY
+ order_id, payment_sequential
+HAVING 
+count_order_id >1;
+-- Took me a lot of time to figure out the way I'll check duplicates, because the table is a little different.
+-- By the way, their are no duplicates in this table, which is a good sign.
+
+-- Let's go for the NULL's Now.
+SELECT
+ COUNT(
+  CASE WHEN order_id IS NULL THEN 1 END) AS 'Null_found_id',
+ COUNT(
+  CASE WHEN payment_installments IS NULL THEN 1 END) AS 'Null_found_installments',
+ COUNT(
+  CASE WHEN payment_sequential IS NULL THEN 1 END) AS 'Null_found_sequentials',
+ COUNT(
+  CASE WHEN payment_type IS NULL THEN 1 END) AS 'Null_found_type',
+ COUNT(
+  CASE WHEN payment_value IS NULL THEN 1 END) AS 'Null_found_value'
+FROM
+ olist_database.olist_order_payments;
+-- The output is 0, for all the columns, which is a good sign, as it means there are no NULL's in this table.
+ 
+-- Now, let's just describe
+DESCRIBE olist_database.olist_order_payments;
+
+-- Okay, now I'll be going column wise for the checks.
+SELECT
+  DISTINCT(payment_type)
+FROM
+ olist_database.olist_order_payments;
+ /* This check is for the payment_type column, their are just 5 payment types, so now as the NULL's are already checked,
+ Their are no other checks to be done for this column.*/
+
+SELECT 
+  DISTINCT( payment_installments) 
+FROM
+ olist_database.olist_order_payments;
+/* Now, this column data type is already INTEGER, so no need for the data type check, NULL's are done, so now I just checked
+Once for any other values, everything is fine but their are values with 0 installments, so that has to be cross-verified.*/
+
+SELECT 
+ COUNT(payment_value)
+FROM
+ olist_database.olist_order_payments
+WHERE
+ payment_value <=0;
+/* So, there are 9 records with payment_value = 0.00, which is not good as we know, this will be a problem in analysis phase,
+So I'll figure out the answer specifically for this by tomorrow.*/
+
+
