@@ -1,0 +1,102 @@
+-- Today, I'll be going on with the olist_order_payments table, I found some inconsistency in the payment_value column,,let's see.
+
+SELECT 
+ COUNT(payment_value)
+FROM
+ olist_database.olist_order_payments
+WHERE
+ payment_value <=0;
+-- The most likely explanation I could find from the internet is that they could be due to vouchers, let me just check that.
+
+SELECT 
+ COUNT(payment_value)
+FROM
+ olist_database.olist_order_payments
+WHERE
+ payment_value = 0 AND payment_type = 'voucher';
+-- 6 of the rows are 0 because they have been bought to voucher, now let's check for the other 3 rows, which are not vouchers.
+
+SELECT
+ DISTINCT(payment_type)
+FROM
+ olist_database.olist_order_payments
+
+-- Now, I actually thought to check for payment tyep for 'not_defined'.
+SELECT
+ COUNT(payment_value)
+FROM
+ olist_database.olist_order_payments
+WHERE
+ payment_value = 0 AND payment_type = 'not_defined';
+-- The output is 3, so it pretty much sums up the issue, but still what should I do about this, let me think.......
+
+-- Let's investigate further about the rest of the 3.
+SELECT order_id
+FROM
+ olist_database.olist_order_payments
+WHERE
+ payment_value = 0 AND payment_type = 'not_defined';
+-- These are the 3 order_id's which have payment_value as 0 and payment_type as 'not_defined'.
+/* 4637ca194b6387e2d538dc89b124b0ee
+  00b1cb0320190ca0daa2c88b35206009
+   c8c528189310eaa44a745b8d9d26908b */
+
+-- Now, let's check for the order_id's in the olist_order_items table, to see if it has any order items.
+SELECT *
+FROM
+ olist_database.olist_order_items
+WHERE
+ order_id = '4637ca194b6387e2d538dc89b124b0ee';
+-- Their are no rows for this id, so it means this order_id doesn't have any items, so it let's check with the olist_orders table.
+
+SELECT *
+FROM
+ olist_database.olist_orders
+WHERE
+ order_id = '4637ca194b6387e2d538dc89b124b0ee';
+-- Here is the breakthrough, this order_id has a status of 'canceled', so it means the payment_value is 0 because the order was canceled, so it makes sense.
+
+--Let's do the same for the rest of the rows, but directly with the olist_orders table. 
+SELECT *
+FROM
+ olist_database.olist_orders
+WHERE
+ order_id = '00b1cb0320190ca0daa2c88b35206009';
+-- The order is canceled.
+
+SELECT *
+FROM
+ olist_database.olist_orders
+WHERE
+ order_id = 'c8c528189310eaa44a745b8d9d26908b';
+-- The order is canceled.
+-- with this, I'm done cleaning the payment_value column, now let's move on to the next column which is order_id.
+
+SELECT order_id
+FROM
+ olist_database.olist_order_payments
+WHERE
+ LENGTH(order_id) <> 32;
+-- The output is 0.
+
+SELECT *
+FROM
+ olist_database.olist_order_payments
+WHERE
+ payment_installments <= 0;
+/* Their are 2 rows, which has 0 values and they're paid through 'credit_card' and also with payment_sequential as 2, 
+ Which is not right. */
+
+/* Okay, I gone through the internet first, their are people who have faced exactly the same problem which somewhere tells me, 
+This is not an data importing error, then I ran the order status on these, and they're delivered, but the payment_installments 
+are 0 for both of the orders, which is not right, so I think this is a data entry error, and I don't have access to the primary 
+source pf the data to confirm the cause, I'll leave it as it is, but I'll make a note of this in the data wrangling report. */
+
+
+-- with this the data wrangling process for olist_order_payments is complete. 
+
+/* Today, I learned something, which is the practical use of Root Cause Analysis, I found the root cause of the 9 rows which has 
+payment value of 0. and also the somewhere gone in depth for the 2 orders which has payment_installments as 0, and found out that 
+it was a data entry error, so I think this is a good learning for me. */
+
+
