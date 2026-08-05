@@ -1,0 +1,41 @@
+-- So, let's start today with the 5th table, I've actually lost track of what are the tales I've completed, let's find out.
+/* These are the tables which have been throught the data cleaning process.
+ 1 Olist_customers
+ 2 olist_geolocation - THIS HAS BEEN LEFT UNRESOLVED, WHICH HAS TO BE DONE AS LAST.
+ 3 olist_order_items
+ 4 olist_order_payments */
+
+-- let's begin with the 5th table which is 'olist_order_reviews', I'll try to complete this by V2 or maybe V3.
+SELECT *
+FROM
+ olist_database.olist_order_reviews;
+/* The table has just 3 useful columns for me which I could check for, because the rest of the columns are just actual reviews, 
+Which are very inconsistent because they're optional but I do have the 3rd score column, which is useful.*/
+
+-- Let's check for the duplicates first.
+SELECT 
+ COUNT(review_id) AS count_distinct,
+ review_id
+FROM
+ olist_database.olist_order_reviews
+GROUP BY
+ review_id
+HAVING
+ count_distinct >1;
+-- Now, I've found 789 rows, which are repeated and mutliple sources from the internet confirm the same number.
+
+-- Let's dig deeper into this. 
+SELECT 
+ COUNT(review_id) AS count_distinct,
+ order_id,
+ review_id
+FROM
+ olist_database.olist_order_reviews
+GROUP BY
+ review_id, order_id
+HAVING
+ count_distinct >1;
+-- Now, their are no rows, which means the 789 rows we found are tied to different order_id's, so they're not repeated but then the review_id should've been unique. 
+
+-- Now, this test was actually suggest by AI, to be honest. 
+-- I'll complete it tomorrow, I', really tired for today, meet you soon.....
