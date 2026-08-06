@@ -35,7 +35,8 @@ GROUP BY
  review_id, order_id
 HAVING
  count_distinct >1;
--- Now, their are no rows, which means the 789 rows we found are tied to different order_id's, so they're not repeated but then the review_id should've been unique. 
+/* Now, their are no rows, which means the 789 rows we found are tied to different order_id's, so they're not repeated but
+ then the review_id should've been unique. */
 
 -- Now, this test was actually suggest by AI, to be honest. 
--- I'll complete it tomorrow, I', really tired for today, meet you soon.....
+-- I'll complete it tomorrow, I'm really tired for today, meet you soon.....
