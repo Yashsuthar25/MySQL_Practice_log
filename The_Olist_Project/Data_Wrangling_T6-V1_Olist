@@ -1,0 +1,64 @@
+/* Hello, I'm back, I know no one was waiting for me but still have to keep the morale up,
+So, I'll start today with my 6th table of the Olist dataset which is 'olist_orders'.*/
+
+/* I can't guarantee if I'll complete the table in one go because basically I've just enjoyed my sunday but still I chose continue
+MySQL at least, not an achievement but just an discipline.*/
+-- These sessions have become my Mini Journal, thinking to start a journaling by the way. 
+
+-- Let's begin with the basic Duplicates & NULL's but starting with a glimpse of data. 
+DESCRIBE olist_orders;
+
+SELECT *
+FROM
+ olist_database.olist_orders;
+
+/* Now, I found two rows which were the first 2 rows which were blank and when I checked the total count against internet, 
+Their was a difference of 2 rows, so I just truncated them. */
+SET SQL_SAFE_UPDATES = 0;
+ 
+DELETE 
+FROM
+ olist_database.olist_orders
+WHERE
+ order_id IS NULL
+ OR order_id = '0'
+ OR order_id = '';
+ 
+SELECT COUNT(*)
+FROM
+ olist_database.olist_orders;
+
+-- This is fixed, now beginning with the Duplicates & NULL's. 
+-- Now, when I checked the table schema, order_id was the primary key, so they should be UNIQUE logically. 
+SELECT COUNT(DISTINCT(order_id))
+FROM
+ olist_database.olist_orders;
+/* Done, 0 duplicates, It was way easy actually and their is not need to check for NULL's on this columns, since count is correct
+And also schema is set for no NULL's. */ 
+
+SELECT 
+    COUNT(
+        CASE WHEN customer_id IS NULL THEN 1 END) AS 'Nulls_cus_id',
+    COUNT(
+        CASE WHEN order_status IS NULL THEN 1 END) AS 'Nulls_order_status',
+    COUNT(
+        CASE WHEN order_purchase_timestamp IS NULL 1 END) AS 'Nulls_purchase',
+    COUNT(
+        CASE WHEN order_approved_at IS NULL 1 END) AS 'Nulls_approved',
+    COUNT(
+        CASE WHEN order_delivered_carrier_date IS NULL 1 END) AS 'Nulls_delivered_date',
+    COUNT(
+        CASE WHEN order_delivered_customer_date IS NULL 1 END) AS 'Nulls_delivered_customer',
+    COUNT(
+        CASE WHEN order_estimated_delivery_date IS NULL 1 END) AS 'Nulls_estimated_delivery'
+FROM 
+ olist_database.olist_orders;
+/* I've found some NULL's that too in 3 columns out of 8 columns, so let me just dig deeper to get to the root cause. 
+Nulls_approved = 160
+Nulls_delivered_date = 1783
+Nulls_delivered_customer = 2965 */
+
+/* After some reasearch, like for about just 5 mins, I found these are expected and I've just cross-verify that these are all 
+Geniune NULL's and not due to some other reasons, and how are these Genuine I'll explain that as well ahead. */
+/* I'm stopping here because I wanted to start working on something which I'm delaying from many days, but I'll start it today
+Even if I don't complete today but I've to start, meet you soon. */
