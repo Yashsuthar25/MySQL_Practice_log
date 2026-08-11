@@ -1,0 +1,54 @@
+-- Let's resume the data cleaning, I've very limited time today as well, I know I should've completed this table but I'm 
+-- A little busy lately, so I'm just not able to complete it. 
+SELECT 
+ *
+FROM
+ olist_database.olist_orders
+WHERE
+ order_status = 'delivered' AND order_approved_at IS NULL;
+/* Problem solved, the result states only the order_approved_at column has NULL's, but the order_delivered_carrier_date and
+ order_delivered_customer_date has the timestamps, so this is an data entry or import issue, I'll flag it now and 
+Later I've thought of creating a Metadata for data cleaning to be aware of the issues I've found .*/
+
+-- Let's begin with the next one now. 
+SELECT 
+ COUNT(*)
+FROM
+ olist_database.olist_orders
+WHERE
+ order_delivered_carrier_date IS NULL AND order_delivered_customer_date IS NULL;
+ 
+SELECT 
+ COUNT(
+ CASE WHEN order_delivered_carrier_date IS NULL AND  order_delivered_customer_date IS NULL AND order_status = 'canceled' THEN 1 END) AS canceled_orders,
+ COUNT(
+ CASE WHEN order_delivered_carrier_date IS NULL AND  order_delivered_customer_date IS NULL AND order_status = 'unavailable' THEN 1 END) AS unavailable_orders,
+ COUNT(
+ CASE WHEN order_delivered_carrier_date IS NULL AND order_delivered_customer_date IS NULL AND order_status = 'processing' THEN 1 END) AS processing_orders,
+ COUNT(
+ CASE WHEN order_delivered_carrier_date IS NULL AND order_delivered_customer_date IS NULL AND order_status = 'invoiced' THEN 1 END) AS invoiced_orders
+FROM
+ olist_database.olist_orders;
+/* Don't judge the query, I've wrote it by my own thinking, now here I'll upload the counts, so you will be able to make more 
+sense once you guys see the count. 
+canceled_orders, unavailable_orders, processing_orders, invoiced_orders
+550            	        609	                    301	                314
+Now, as you can see the results, now the total count is 1774, which is 9 count less than the total null's  ,
+With this results we now know why their are NULL's except those 9 rows, I'll have to find them now. */
+-- Now here processing & Invoiced orders are still in process when the data was originally imported. 
+
+SELECT 
+	*
+FROM
+ olist_database.olist_orders
+WHERE
+ order_status NOT IN ('canceled', 'unavailable', 'processing', 'invoiced') AND
+ order_delivered_carrier_date IS NULL AND order_delivered_customer_date IS NULL;
+/* The verdict, the rest of 9 rows, their are 7 rows which are marked as approved & created, which is not an issue because orders
+Could be just approved & created as well but their are 2 orders where the order_status is delivered, 
+This is an issue because 1 has no delivery carrier & delivery customer timestamp and 1 has only delivery customer timestamp and 
+it is missing delivery carrier timestamp. */
+
+-- I'm adding these comments for you guys and also for me to consider when I'm in my analysis phase. 
+-- This much for today, I've learnt to get to the root cause of any problem or whatever abnormal I come across. 
+
