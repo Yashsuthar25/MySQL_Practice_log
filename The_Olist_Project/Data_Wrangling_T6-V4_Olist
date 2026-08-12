@@ -1,0 +1,40 @@
+-- Sorry, but today's session will be very short, I'll just find out the reason behind NULL's in the order_delivered_customer_date.
+
+-- So, let's begin. 
+SELECT
+ *
+FROM
+ olist_database.olist_orders
+WHERE
+ order_delivered_customer_date IS NULL;
+ 
+SELECT
+ COUNT(*)
+FROM
+ olist_database.olist_orders
+WHERE
+ order_delivered_customer_date IS NULL AND order_status = 'shipped';
+-- so, their are 1107 orders, which are shipped but were not received by the customers when the data was imported. 
+
+-- Now, this query
+SELECT 
+	*
+FROM
+ olist_database.olist_orders
+WHERE
+ order_status IN ('canceled', 'unavailable', 'processing', 'invoiced', 'approved', 'created') AND
+	order_delivered_customer_date IS NULL;
+-- The output is 1850 rows, which has the order status as above. 
+-- 1850 + 1107 = 2957, the remaining is 8 rows, let me search them as well. 
+
+--Found it. 
+SELECT *
+FROM 
+ olist_database.olist_orders
+WHERE 
+ order_delivered_customer_date IS NULL AND order_status = 'delivered';
+/* The rest of 8 rows are marked as 'delivered', but they're lack the delivery timestamp, so finally the mystery is solved for 
+All 3 columsn where I found the NULL's but I can't really manipulate the data because their is not need to. 
+But, while analysis phase, I've to make sure I'm using the metadata of data wrangling. */
+
+-- let's end this here today, I'll for sure complete this table by tomorrow after some more necessary data consistency checks. 
