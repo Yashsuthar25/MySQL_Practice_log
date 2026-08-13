@@ -1,0 +1,45 @@
+/* A person should never claim anything, I've claimed yesterday that I'll complete the data cleaning process for the table today,
+But I think that is unlikely because I was into something and it is already late, hmm I'll try my best. */
+
+SELECT
+ *
+FROM
+ olist_database.olist_orders;
+ 
+DESCRIBE olist_orders;
+
+SELECT
+COUNT(
+	CASE WHEN LENGTH(order_id) != 32 THEN 1 END) AS inconsistent_order_id,
+COUNT(
+	CASE WHEN LENGTH(customer_id) != 32 THEN 1 END) AS inconsistent_customer_id
+FROM
+ olist_database.olist_orders;
+-- The length is 32, which is expected and that is good for me. 
+ 
+SELECT 
+ DISTINCT(order_status)
+FROM
+ olist_database.olist_orders;
+-- Their are 8 types which is same as the Metadata states. 
+
+/* I've not checked any further checks for DATETIME colums because the data type is DATETIME if not I could've got it in the
+NULL's count and since I've dug deeper into NULL's count I found, I'm good to go ahead. */
+
+-- I think that is enough for this table, that is what I believe by the way, let's think again. 
+
+SELECT 
+ COUNT(DISTINCT(customer_id))
+FROM
+ olist_database.olist_orders;
+-- The output is 99441, which matches the Metadata and also a good signal that we can rely on customer_id for this table. 
+ 
+SELECT * 
+FROM olist_database.olist_orders
+WHERE order_purchase_timestamp > order_approved_at
+   OR order_approved_at > order_delivered_carrier_date
+   OR order_delivered_carrier_date > order_delivered_customer_date
+LIMIT 10;
+/* Okay, this was the last test required and I would say this again whenever I try to finish my data wrangling process, their is
+Something which comes out of the most unexpected way, their are 1381 rows which are not in sequence, now I've to inspect them,
+To be honest, this will require a lot of digging, I'll do it tomorrow, I tried my best to complete it today. */
