@@ -1,0 +1,59 @@
+/* I'm back, today I'll complete this table, since I dealt with the final issue yesterday of dates not being in an order, 
+Let's find out the root cause for that, and also find out if we can fix that issue because dates are very important for us.*/
+
+--To be honest, I've used AI a bit more for this current session because the queries are a little advance. 
+SELECT
+SUM(CASE WHEN order_approved_at < order_purchase_timestamp 
+           THEN 1 ELSE 0 END) AS approved_before_purchase_sameday,
+SUM(CASE WHEN order_delivered_carrier_date < order_approved_at 
+           THEN 1 ELSE 0 END) AS carrier_before_approved_sameday,
+SUM(CASE WHEN order_delivered_customer_date < order_delivered_carrier_date 
+           THEN 1 ELSE 0 END) AS customer_before_carrier_sameday
+FROM olist_orders;
+
+-- 	approved_before_purchase_sameday	carrier_before_approved_sameday	customer_before_carrier_sameday
+--    0	, 1358	,  23 respectively.
+
+SELECT
+SUM(CASE WHEN order_approved_at < order_purchase_timestamp 
+           AND DATE(order_approved_at) = DATE(order_purchase_timestamp) 
+           THEN 1 ELSE 0 END) AS approved_before_purchase_sameday,
+SUM(CASE WHEN order_delivered_carrier_date < order_approved_at 
+           AND DATE(order_delivered_carrier_date) = DATE(order_approved_at) 
+           THEN 1 ELSE 0 END) AS carrier_before_approved_sameday,
+SUM(CASE WHEN order_delivered_customer_date < order_delivered_carrier_date 
+           AND DATE(order_delivered_customer_date) = DATE(order_delivered_carrier_date) 
+           THEN 1 ELSE 0 END) AS customer_before_carrier_sameday
+FROM olist_orders;
+--approved_before_purchase_sameday, carrier_before_approved_sameday, customer_before_carrier_sameday
+-- 0	,                                         678	,                       3 respectively. 
+
+SELECT 
+  DATEDIFF(order_approved_at, order_delivered_carrier_date) AS days_early,
+  COUNT(*) AS row_count
+FROM olist_orders
+WHERE order_delivered_carrier_date < order_approved_at
+  AND DATE(order_delivered_carrier_date) != DATE(order_approved_at)
+GROUP BY days_early
+ORDER BY days_early;
+/* the data is spread across many different days of delays, I'm pasting the results. 
+Days_early        row_count
+1	                485
+2	                97
+3	                36
+4	                33
+5	                7
+6	                6
+7	                3
+8	                4
+9	                8
+171             	1
+Now, this has made me a little worried because I don't know what to do with this, I'll have to use internet to find the next step.*/
+
+/* I've noticed one thing, whereever I've created a staging table and imported the data, their are usually more data consistency
+Issues, this is just assumption and little observation speaking and not exactly data. */
+
+/* To be honest, I searched and also used my understanding to an extent I can, I did find many on the internet conveying the same
+Data inconsistency issues, they did not drop them but just flagged and excluded them for specific analysis & KPI's,
+I'll also be doing the same but when I'll revisit the table T2, I'll also revisit this issue and find out if I can do something
+With these, because not everything is meant to solve at that exact time, I know it is not that great but I'm trying my best. */
