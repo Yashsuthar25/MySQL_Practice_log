@@ -1,0 +1,90 @@
+/* Hello, After completing the data wrangling process for all of the tables, before moving ahead, I'll first form
+the questions, which I'll follow to go through the analysis phase, because it is important to have an clear goal.*/
+
+/* Now, I'm being completely honest, but I've generated the ask phase via AI, I know that is not the best way to do it,
+But, I think as I'm just starting out, I'll go with the generated one and for the next project, I'll use my own
+Understanding of the data & the business problem to generate the ask phase.*/
+
+# Ask Phase — Olist E-Commerce Data Analysis
+
+
+## Key Business Questions
+
+Organized basic → advanced. Each includes context on *why* it matters and *what to look at*, so you can figure out the right approach yourself.
+
+### 🟢 Level 1 — Foundational (single table, straightforward counting/aggregating)
+
+**1. What is the distribution of `order_status` across all orders?**
+Context: Most orders should be `delivered`, but the wrangling process surfaced other statuses too (`canceled`, `unavailable`, `processing`, `invoiced`, `shipped`). Before analyzing delivery performance, it helps to know what share of the dataset each status represents — this tells you how much of the data is even "complete" enough to analyze for delivery timing.
+
+**2. What are the top 10 states by number of customers?**
+Context: This is a simple volume question, but it sets up later questions about whether certain states have worse delivery experiences than others. Use `customer_state` from the customers table.
+
+**3. What is the average `review_score`, and how are scores distributed across 1–5?**
+Context: Knowing whether scores skew heavily positive, negative, or are evenly spread changes how you interpret every other review-related question later. A dataset where 80% of reviews are 5-star behaves very differently than one that's evenly split.
+
+**4. What are the most common `payment_type`s, and what share of total payment value does each represent?**
+Context: Olist supports multiple payment types (credit card, boleto, voucher, debit card, and the `not_defined` anomaly you flagged during wrangling). Understanding the normal split first will help you judge how unusual the `not_defined` cases really are in the next section.
+
+---
+
+### 🟡 Level 2 — Intermediate (combining 2–3 tables)
+
+**5. What is the average delivery time by customer state?**
+Context: Delivery time = the gap between when a customer places an order and when they actually receive it. Brazil is geographically huge, so you'd expect delivery time to vary a lot by region. This question combines the orders table (for the two relevant timestamps) with the customers table (for `customer_state`). Think about how you'll handle orders that were never actually delivered — should they be included in an "average delivery time" calculation at all?
+
+**6. Which product categories generate the most revenue, and which have the highest freight cost relative to price?**
+Context: This combines order_items (price, freight_value) with products (category). A category where freight is disproportionately high compared to item price might signal heavy/bulky products, or inefficient shipping — either way, it's a pattern worth flagging, not just a number to report.
+
+**7. Which sellers have the highest order volume, and do they also have the highest average review scores — or is there a mismatch?**
+Context: It's tempting to assume "sells the most = best seller," but high volume and high satisfaction don't always go together. This question needs order_items (to count orders per seller) joined with order_reviews (via orders) to compare volume against score.
+
+**8. Do the payment anomalies you flagged during wrangling relate to order outcome?**
+Context: You found rows where `payment_type = 'not_defined'` and `payment_value = 0`. Before treating this as a data error, check whether these payments are concentrated in a specific `order_status` (e.g., mostly canceled orders). If so, it's not really an anomaly — it's a logical pattern (no real payment was ever collected, so the payment record reflects that). This means combining order_payments with orders.
+
+---
+
+### 🟠 Level 3 — Advanced (multi-table reasoning, deeper investigation)
+
+**9. How significant is the "delivered but missing delivery date" issue you found — and is it getting better or worse over time?**
+Context: During wrangling, you found orders marked `delivered` with a NULL `order_delivered_customer_date` — logically, that shouldn't happen. Rather than just re-confirming the count exists, this question asks you to calculate it as a *percentage* of all delivered orders, and then break that percentage down by month or quarter using `order_purchase_timestamp`. Is this a one-time data glitch from a specific period, or a persistent issue across the whole dataset? That distinction matters a lot for how you'd describe this to a stakeholder.
+
+**10. Is there a real relationship between delivery delay and review score?**
+Context: This is probably the single most important business question in the whole project. "Delay" here means the difference between when an order was estimated to arrive (`order_estimated_delivery_date`) and when it actually arrived. Rather than treating delay as a single continuous number, try grouping orders into buckets — for example: delivered early, on-time, slightly late (1–3 days), and very late (4+ days) — then compare the average review score within each bucket. A pattern here (e.g., scores drop sharply after 3 days late) would be a genuinely useful, actionable finding for a logistics team.
+
+**11. Which product category is each seller's strongest and weakest performer, by revenue?**
+Context: Many sellers sell across multiple product categories. This question isn't about the marketplace as a whole — it's about *ranking categories within each individual seller's own product mix*, which is a different kind of comparison than a simple top-10 list. Think about how you'd identify, for a single seller, which of their categories ranks highest and lowest.
+
+**12. Do cross-state orders (seller and customer in different states) take longer to deliver or score lower than same-state orders?** *(a bit outside the core delivery/review story, but a good test of your data)*
+Context: You deliberately left `geolocation_city` and precise coordinates unresolved during wrangling because your project didn't need that level of precision. This question is a good test of that decision: can you still answer a *coarser* geographic question — same state vs. different state — using just `customer_state` and `seller_state`, without needing the messier city/coordinate data at all? This is a realistic analyst situation: knowing which level of data cleanliness is "good enough" for a given question.
+
+---
+
+### 🔴 Level 4 — Stretch goals (optional, only if you want to push further)
+
+**13. Does the duplicate `review_id` issue you flagged actually change your results?**
+Context: You found duplicate review IDs during wrangling but left them unresolved. Now, actually test it: recalculate average review scores per seller two ways — once keeping every review row as-is, and once after removing duplicates (e.g., keeping only the first or most recent one per order). If the numbers barely change, the issue was minor. If they shift meaningfully, that's an important caveat to document before trusting any review-based conclusion.
+
+**14. Do repeat customers behave differently from one-time customers?**
+Context: Remember that `customer_id` is order-specific, but `customer_unique_id` identifies the same real person across multiple orders. This question asks you to identify which `customer_unique_id`s appear more than once, then compare their average order value and review scores against customers who only ordered once. This touches on customer loyalty — a classic business question — using a data quirk you already understand well from the customers table wrangling.
+
+**15. Take one finding outside SQL.**
+Context: Pick your single most interesting finding so far (delivery delay vs. review score is a strong candidate) and represent it visually using a tool outside MySQL — Excel, Python, or a BI tool. You don't need to master a new tool deeply; the goal is just to practice explaining a number-based finding in a visual way, since that's what the later Share phase will require.
+
+---
+
+## What's Intentionally Out of Scope (for now)
+
+Carried over from your wrangling decisions — these stay unresolved unless a specific question above truly needs them:
+- `geolocation_city` formatting inconsistency (using `geolocation_state` instead, see Q12)
+- Precise `geolocation_lat`/`lng` distance calculations (using state-level proximity as a rough proxy instead)
+- Deep root-cause investigation into the 2 unexplained NULLs in product dimensions
+
+## Deliverables for the Analyze Phase
+
+- One saved query (or small set of related queries) per question, with a short written note: the question, what you found, and a one-line takeaway
+- A running `findings.md` log — plain-language summary of what each question revealed, written as you go (this becomes your Share-phase raw material)
+
+## Success Criteria
+
+You'll know the Ask phase has done its job when every question above ties back to a business "so what" — not just "here's a number," but "here's what Olist could act on."
