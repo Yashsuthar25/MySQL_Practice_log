@@ -1,0 +1,31 @@
+/* In today's session I'll not run any queries, this is just an start I would say, so I've created a separate folder
+for the data analysis phase, in this folder I'll save up all my analysis scripts. */
+
+/* For just to start, I'll go throught the The_Ask phase, and I'll try to undertstand the business tasks, 
+If possible, I'll try to execute an single query to just start. let's go */
+
+-- The questions are in a sequence like **xx, so let's go.
+-- **1
+SELECT *
+FROM
+    olist_database.olist_orders
+LIMIT
+    10;
+
+SELECT
+    order_status,
+    COUNT(order_status) AS Total_individual_status
+FROM
+    olist_database.olist_orders
+GROUP BY
+    order_status;
+-- Now, from now on, I'll try to paste the answer itself here but only if it is concise & short. **1 complete. 
+/* delivered	96478
+unavailable	609
+shipped	1107
+canceled	625
+invoiced	314
+processing	301
+approved	2
+created	5 */
+
