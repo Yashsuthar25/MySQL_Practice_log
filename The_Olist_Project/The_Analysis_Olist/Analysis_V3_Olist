@@ -1,0 +1,28 @@
+-- Hello, sorry currently I'm not that consistenct, but I'm trying my best.
+-- So, let's begin, let's see how much tasks can I complete.
+
+-- #004
+-- So, I've to find the most common payment_type by taking their total share.
+SELECT *
+FROM
+	olist_database.olist_order_payments
+LIMIT
+	10;
+    
+SELECT
+	SUM(payment_value) AS total_payment,
+    payment_type
+FROM
+	olist_database.olist_order_payments
+GROUP BY
+	payment_type;
+/* something is strange, I'm pasting the result.
+12542084.19	credit_card
+2869361.27	boleto
+379436.87	voucher
+217989.79	debit_card
+0.00	not_defined,
+This will require some deeper investigation.*/
+
+-- Okay, this would be very early but, the next tasks require little more
+-- because, they need joins, so I'll start tomorrow with the next one.
