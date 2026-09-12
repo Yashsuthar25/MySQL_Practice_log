@@ -1,0 +1,65 @@
+-- Hello, let's begin with the next tasks for the analysis.
+
+SELECT
+	*
+FROM
+	olist_database.olist_orders
+LIMIT
+	10;
+    
+SELECT *
+FROM
+	olist_database.olist_customers
+LIMIT
+	10;
+    
+WITH date_difference_table AS (SELECT
+    DATEDIFF(O_orders.order_delivered_carrier_date, O_orders.order_purchase_timestamp) AS Date_Difference,
+    O_customers.customer_state
+FROM
+	olist_database.olist_orders AS O_orders
+LEFT JOIN
+	olist_database.olist_customers AS O_customers
+ON 
+	O_orders.customer_id = O_customers.customer_id)
+SELECT
+	AVG(Date_Difference) AS avg_date_difference,
+    customer_state
+FROM
+	date_difference_table
+GROUP BY
+	customer_state;
+-- I'm gonna completely honest, this single query has consumed huge time, 
+-- because, I'd to think a lot, so I'll end today with this much.
+/*
+3.3012	RJ
+3.1474	SP
+3.2331	MG
+3.2113	PR
+3.1599	GO
+3.2873	BA
+3.4113	AL
+3.1349	MS
+3.3361	CE
+3.1872	DF
+3.2319	RS
+3.2443	PE
+3.3316	SC
+3.3679	ES
+3.5864	MA
+3.4648	PA
+3.1754	MT
+3.4564	PB
+2.9184	AM
+3.4627	AP
+3.1715	PI
+3.4460	TO
+2.8230	RO
+3.5489	RN
+3.6366	SE
+3.4568	AC
+4.5333	RR   */
+    
+
+	
+	
