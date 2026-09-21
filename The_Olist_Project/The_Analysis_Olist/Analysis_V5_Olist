@@ -1,0 +1,91 @@
+-- Hello, I hope you guys are doing well, I don't know who'll be reading this,
+-- But, I know I took a little longer break than it was supposed to, but hear I'm.
+
+-- Let's start with today's session, I'll just start & not make it lengthy today, sorry.
+-- **6
+-- Let's go with the first part of the task, which product cagtegories generates the most rev.
+SELECT *
+FROM
+	olist_order_items
+LIMIT 10;
+
+WITH Revenue_table AS (SELECT
+    i.price,
+    i.product_id,
+    p.product_category_name_english,
+    i.order_id
+FROM
+	olist_database.olist_order_items AS i
+LEFT JOIN
+	olist_database.olist_products AS p
+ON
+	i.product_id = p.product_id)
+SELECT
+	SUM(price) AS Total_revenue,
+    product_category_name_english
+FROM
+	Revenue_table
+GROUP BY
+	product_category_name_english
+ORDER BY 
+	Total_revenue DESC
+LIMIT 10;
+-- Here is the result
+/* 1258681.34	health_beauty
+1205005.68	watches_gifts
+1036988.68	bed_bath_table
+988048.97	sports_leisure
+911954.32	computers_accessories
+729762.49	furniture_decor
+635290.85	cool_stuff
+632248.66	housewares
+592720.11	auto
+485256.46	garden_tools
+
+These are the top 10 product categories by revenue. */
+
+-- Now, let's find out the highest product category which has higher freight cost
+-- compared to the price.
+
+-- First a basic check.
+SELECT
+	i.freight_value,
+    p.product_category_name_english
+FROM
+	olist_database.olist_order_items AS i
+LEFT JOIN 
+	olist_database.olist_products AS p
+ON
+	i.product_id = p.product_id
+ORDER BY
+	i.freight_value DESC
+LIMIT 10;
+/* these are the top 10 highest freight costs
+409.68	baby
+375.28	housewares
+375.28	housewares
+339.59	housewares
+338.30	health_beauty
+322.10	health_beauty
+321.88	health_beauty
+321.46	construction_tools_construction
+317.47	industry_commerce_and_business
+314.40	construction_tools_construction
+I'll dig deeper into this in the next session */
+
+/* Just for information, I've started again my sessions today,
+I'll try my best to maintain my consistency, even if I get a wrong answer.*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
