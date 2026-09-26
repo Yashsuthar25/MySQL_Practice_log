@@ -1,0 +1,13 @@
+-- Hello, first things first, it would seem very strange a V1 for Ask Phase, but their is a catch to it,
+/* Actually, since this is my first project, that too based on PBL & A real dataset, I don't have the complete way to
+    figure out the whole Ask phase now, so for now I'll include the basic business requirement I've to figure out,
+    Then, when I finish that, I'll come back to add more or limit it to my understanding. */
+
+--Sorry, I'm little off with my consistency currently, but I'll try to keep it up as much as I can........
+
+/* So, the basic business requirement first is to find out the most predictable metrics,
+    This could be related to sales, units, revenue, profit & more. 
+    I'll go through the dataset thoroughly today to find out more about the metrics I could find now. */
+
+-- I know this isn't a way an actual analyst would be doing it but I don't have a specific business task my 
+-- stakeholders are expecting from me, so I'll have to create one or more for that .
